@@ -58,10 +58,11 @@ class StepsDefinition {
     private var errorMessage: String? = null
 
     // Agent Registration Steps
-    @Given("I am authenticated as an administrator")
-    fun iAmAuthenticatedAsAnAdministrator() {
-        currentAgent = createAgent(Role.ADMINISTRATOR)
-    }
+@Given("I am authenticated as an administrator")
+fun iAmAuthenticatedAsAnAdministrator() {
+    currentAgent = createAgent(Role.ADMINISTRATOR)
+    SharedTestContext.currentAgentId = currentAgent?.agentId
+}
 
     @Given("an agent with username {string} does not exist")
     fun anAgentWithUsernameDoesNotExist(username: String) {
@@ -200,10 +201,11 @@ class StepsDefinition {
     }
 
     // Patient Registration Steps
-    @Given("I am authenticated as a pharmacist")
-    fun iAmAuthenticatedAsAPharmacist() {
-        currentAgent = createAgent(Role.PHARMACIST)
-    }
+@Given("I am authenticated as a pharmacist")
+fun iAmAuthenticatedAsAPharmacist() {
+    currentAgent = createAgent(Role.PHARMACIST)
+    SharedTestContext.currentAgentId = currentAgent?.agentId
+}
 
     @Given("the patient does not exist in the system")
     fun thePatientDoesNotExistInTheSystem() {
@@ -215,11 +217,12 @@ class StepsDefinition {
         // Consent will be provided in registration data
     }
 
-    @Given("a patient with health ID {string} already exists")
-    fun aPatientWithHealthIdAlreadyExists(healthId: String) {
-        val patient = createPatientWithHealthId(healthId)
-        patientRepository.save(patient)
-    }
+@Given("a patient with health ID {string} already exists")
+fun aPatientWithHealthIdAlreadyExists(healthId: String) {
+    val patient = createPatientWithHealthId(healthId)
+    patientRepository.save(patient)
+    SharedTestContext.currentPatientId = patient.patientId
+}
 
     @Given("the consent form has not been signed")
     fun theConsentFormHasNotBeenSigned() {
@@ -257,6 +260,7 @@ class StepsDefinition {
         val facade = PatientFacadeImpl(patientRepository, patientFactory, eventEmitter)
         val useCase: RegisterPatient = RegisterPatientImpl(facade)
         patientId = useCase.register(patientDto)
+        SharedTestContext.currentPatientId = patientId
     }
 
     @When("I register a minor patient with the following information:")
@@ -285,6 +289,7 @@ class StepsDefinition {
         val facade = PatientFacadeImpl(patientRepository, patientFactory, eventEmitter)
         val useCase: RegisterPatient = RegisterPatientImpl(facade)
         patientId = useCase.register(patientDto)
+        SharedTestContext.currentPatientId = patientId
     }
 
     @When("I attempt to register a patient with health ID {string}")
@@ -358,11 +363,12 @@ class StepsDefinition {
         currentAgent = createAgent(Role.PHARMACIST)
     }
 
-    @Given("a patient with health ID {string} exists in the system")
-    fun aPatientWithHealthIdExistsInTheSystem(healthId: String) {
-        val patient = createPatientWithHealthId(healthId)
-        patientRepository.save(patient)
-    }
+@Given("a patient with health ID {string} exists in the system")
+fun aPatientWithHealthIdExistsInTheSystem(healthId: String) {
+    val patient = createPatientWithHealthId(healthId)
+    patientRepository.save(patient)
+    SharedTestContext.currentPatientId = patient.patientId
+}
 
     @Given("the prescriber with license {string} is valid")
     fun thePrescriberWithLicenseIsValid(license: String) {
