@@ -25,4 +25,8 @@ class PrescriberValidationServiceStub : PrescriberValidationService {
     fun addValidPrescriber(licenseNumber: String) {
         validPrescribers.add(licenseNumber)
     }
+
+    fun clear() {
+        validPrescribers.clear()
+    }
 }

@@ -20,4 +20,8 @@ class PrescriptionRepositoryStub : PrescriptionRepository {
     override fun findByPatient(patientId: PatientId): List<Prescription> {
         return prescriptions.values.filter { it.patientId == patientId }
     }
+
+    fun clear() {
+        prescriptions.clear()
+    }
 }
